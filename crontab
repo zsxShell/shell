@@ -1,0 +1,51 @@
+命令：crontab -e
+0 1 * * * /home/work/shells/monitor.sh `/bin/date +\%Y-\%m-\%d-\%H` > /home/work/logs/monitor.log.`/bin/date +\%Y-\%m-\%d` 2>&1 &
+
+固定用法  2>&1 &   2>&1 为异常情况也输出到前面正常的日志中； 最后一个 & 为后台运行。
+
+monitor.sh内容：
+#!/bin/bash
+source /home/work/.bash_profile
+
+MAIL_LIST="wujinliang@360.cn,wangguo@360.cn"
+
+today=`date +%Y-%m-%d`
+hostname=`hostname`
+monitor_url="http://localhost:8080/status.html"
+monitor_app_path="/home/work/tools/tomcat-shuaji/"
+
+tomcat_tick=0
+retry=0
+max_retry_count=10
+while true;do
+    echo "$today url:$monitor_url retry: $retry max: $max_retry_count"
+    http_code=`curl -L -o /dev/null --silent --write-out "%{size_download}" "$monitor_url"`
+    if [ "$retry" -gt 100 ];then
+        sleep 10000
+    fi
+    if [ "`date +%Y-%m-%d-%H`" != "$1" ];then
+        echo "$today :不是当天的任务，取消掉不执行"
+        break
+    fi
+    # 若是返回值非200，则重启tomcat
+    if [ "$http_code" -gt 3 ];then
+        tomcat_tick=$((tomcat_tick+1))
+        retry=$((retry+1))
+        if [ $tomcat_tick -gt 5 ]; then
+            tomcat_tick=0
+            echo "$hostname : $today :http size is $http_code , monitor url is $monitor_url now restart search..." | mail -s "[Cloud]shuaji Error" $MAIL_LIST -- -f 'cloud@360md.360.cn'
+            cd $monitor_app_path
+            kill -9 `ps aux|grep tomcat|grep shuaji|grep -v grep|awk '{print $2}'`
+            bin/startup.sh
+        fi
+    else
+        retry=0
+        tomcat_tick=0
+    fi
+    sleep 20
+done
+
+
+monitor的作用为监控tomcat运行情况，非正常状态重启tomcat。
+关键知识点：http_code=`curl -L -o /dev/null --silent --write-out "%{size_download}" "$monitor_url"`
+也可以通过%{http_code}来获取curl状态
