@@ -1,0 +1,20 @@
+#!/bin/bash
+source /home/work/.bash_profile
+web_app_path="/home/q/system/api.jiagu.360.cn"
+#web_app_path="/usr/local/tomcat/webapps"
+upload_path="/home/work/downloads"
+cd $web_app_path
+
+echo "Backing jiagu war..."
+/bin/cp -r ROOT.war /home/work/BACKUP/jiagu.`date +%Y-%m-%d`.war
+echo "Killing tomcat..."
+kill -9 `ps aux|grep tomcat|grep -v grep|awk '{print $2}'`
+sleep 1
+echo "Removing root war..."
+rm ROOT* -fr
+echo "Create new root war..."
+cp ${upload_path}/$1.`date +%Y-%m-%d`.war ROOT.war
+sleep 1
+echo "Restarting tomcat..."
+/usr/local/tomcat/bin/startup.sh
+sleep 2
