@@ -5,7 +5,6 @@ for h in ${host}
 do
         echo "!!!!!!Start to deploy $h !!!!!!!"
         hname=`echo "${h}" | awk -F'.' '{print $3}'`
-        #echo ${hname}
         echo "Send wars to server..."    
         scp ~/downloads/${hname}.`date +%Y-%m-%d`.war work@$h:~/downloads/${hname}.`date +%Y-%m-%d`.war
         sleep 2
