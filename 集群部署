@@ -1,6 +1,6 @@
 #!/bin/bash
 source /home/work/.bash_profile
-host="node227v.add.bjdt.qihoo.net node228v.add.bjdt.qihoo.net node108v.add.bjsc.qihoo.net node109v.add.bjsc.qihoo.net"
+host="ipA ipB ipC"
 for h in ${host}
 do
         echo "!!!!!!Start to deploy $h !!!!!!!"
