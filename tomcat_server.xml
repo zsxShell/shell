@@ -1,0 +1,12 @@
+1、优化后的Connector配置
+<Connector port="8080" protocol="HTTP/1.1" connectionTimeout="20000" address="127.0.0.1"
+    redirectPort="8443" maxHttpHeaderSize="8169" acceptCount="2000" maxThreads="2000" minSpareThreads="100" maxSpareThreads="1000" enableLookups="false" URIEncoding="UTF-8"/>
+
+2、修改webapps目录的方法
+<Host name="localhost"  appBase="/home/q/system/api.jiagu.360.cn"   unpackWARs="true" autoDeploy="true">
+    <!--<Context path="" docBase="/home/q/system/api.jiagu.360.cn/ROOT" debug="0" reloadable="true" />-->
+        <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs"
+               prefix="localhost_access_log." suffix=".txt"
+               pattern="%h %l %u %t &quot;%r&quot; %s %b" />
+
+      </Host>
