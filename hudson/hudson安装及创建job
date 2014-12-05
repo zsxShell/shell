@@ -54,4 +54,6 @@ create job 配置内容：
   输入密码。
   3、ERROR: Could not parse the URI. Exiting ...
 java.net.URISyntaxException: Illegal character in scheme name at index 3: git@10.16.15.45:~/server/md/shuaji.git
-  解决方案：
+  解决方案,两种可能的原因
+  一：hudson git plugin版本导致，本人用的2.2.8一直报错，改成2.0.1即不报错，.phi文件：http://yunpan.cn/cfA2epG85tyDP （提取码：a1a6）
+二：job关于git的一个配置没有配，见图：http://yunpan.cn/cfA22Szf9YJNt （提取码：d84f）
