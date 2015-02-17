@@ -24,6 +24,6 @@ A（ip/host）
 B (ip/host)
 
 6、把slaves和spark-env.sh文件复制到B服务器
-7、然后需要B和A建立 无密码登录ssh的信任关系。（具体操作见我的ssh no password文章）
+7、然后需要B和A建立 无密码登录ssh的信任关系。（具体操作见我github的no password for ssh文章）
 8、配置完以后即可通过A机器./sbin/start-master.sh启动master节点
 ./sbin/start-slaves.sh来启动所有worker节点
