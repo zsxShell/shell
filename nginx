@@ -1,1 +1,6 @@
+nginx中配置某个请求映射到本地某个文件，需要使用alias配置项
+        location = /r/getRootSuccess {
+                alias /usr/local/www/result.html;
+        }
 
+        
