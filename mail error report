@@ -1,0 +1,12 @@
+#!/bin/bash
+#============== 错误报告脚本 =============#
+source /home/work/.bash_profile
+MAIL_LIST="wujinliang@360.cn,liuou@360.cn,zhaoshengxian@360.cn"
+hostname=`hostname`
+
+netstat=`netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'`
+echo $netstat | mail -s "[$hostname]Shuaji Netstat" $MAIL_LIST -- -f 'cloud@360md.360.cn'
+tail -n100000 /home/work/logs/shuaji.error.log | mail -s "[$hostname]Shuaji error log" $MAIL_LIST -- -f 'cloud@360md.360.cn'
+
+NGINX_ACCESS_LOG=/usr/local/nginx/logs/shuaji_access.log
+tail -n1000000 $NGINX_ACCESS_LOG | awk '{if($NF>2) print $NF,"秒",$0}' | sort -g --reverse | mail -s "[$hostname]Shuaji Nginx Request Time Report" $MAIL_LIST -- -f 'cloud@360md.360.cn'
